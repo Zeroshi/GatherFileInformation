@@ -9,7 +9,7 @@ namespace FileInformationEngine.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index(string[] Directories)
+        public IActionResult Index()
         {
             return View();
         }

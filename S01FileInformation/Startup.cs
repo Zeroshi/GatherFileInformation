@@ -47,7 +47,7 @@ namespace FileInformationEngine
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Endpoint}/{action=Index}/{id?}");
+                    template: "{controller=Endpoint}/{action=Index}/{directories?}");
             });
         }
     }

@@ -1,4 +1,5 @@
 ﻿using FileInformationEngine.Interfaces;
+using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Security.Cryptography;
@@ -9,14 +10,17 @@ namespace FileInformationEngine
     public class Logic : ILogic
     {
         private readonly ISaving _saving;
+        private readonly ILogger _logger;
 
-        public Logic(ISaving saving)
+        public Logic(ISaving saving, ILogger<Logic> logger)
         {
             _saving = saving;
+            _logger = logger;
         }
 
         public void InitialDirFiles(string initialDirectory)
         {
+            _logger.LogInformation("Directory Search Initiated");
             GatherFileInformation(initialDirectory);
         }
 
@@ -32,8 +36,10 @@ namespace FileInformationEngine
             }
             catch (System.Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                _logger.LogError(ex.ToString());
             }
+
+            _logger.LogInformation("File information gathering completed");
         }
 
         public void GatherFileInformation(string directory)
@@ -62,6 +68,7 @@ namespace FileInformationEngine
         public void ClearDbTable()
         {
             _saving.ClearDbTable();
+            _logger.LogInformation("Table cleared");
         }
     }
 }
