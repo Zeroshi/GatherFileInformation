@@ -1,5 +1,6 @@
 ﻿using FileInformationEngine.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,13 +10,26 @@ namespace FileInformationEngine
     public class Saving : ISaving
     {
         private const string TRUNCATE_TABLE_FILEINFORMATION = "TRUNCATE TABLE FileInformation";
+        private readonly ILogger _logger;
+
+        public Saving(ILogger<Saving> logger)
+        {
+            _logger = logger;
+        }
 
         public void AddToDb(FileInformation fileInformation)
         {
-            using (var db = new FileInformationContext())
+            try
             {
-                db.FileInformation.Add(fileInformation);
-                db.SaveChanges();
+                using (var db = new FileInformationContext())
+                {
+                    db.FileInformation.Add(fileInformation);
+                    db.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
             }
         }
 
@@ -30,7 +44,7 @@ namespace FileInformationEngine
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                _logger.LogError(ex.ToString());
             }
         }
     }

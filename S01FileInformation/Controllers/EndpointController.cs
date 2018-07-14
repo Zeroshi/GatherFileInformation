@@ -24,11 +24,24 @@ namespace FileInformationEngine.Controllers
             _logic = logic;
         }
 
-        public void Index(string server)
+        //add server name and directories for input
+
+        public void Index()
         {
             _logic.ClearDbTable();
 
             foreach (var initalDir in testPath)
+            {
+                _logic.InitialDirFiles(initalDir);
+                _logic.DirSearch(initalDir);
+            }
+        }
+
+        public void Index(string serverName, string[] directories)
+        {
+            _logic.ClearDbTable();
+
+            foreach (var initalDir in directories)
             {
                 _logic.InitialDirFiles(initalDir);
                 _logic.DirSearch(initalDir);
